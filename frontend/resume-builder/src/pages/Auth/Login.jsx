@@ -1,13 +1,15 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Input from '../../components/Inputs/Input';
 import { validateEmail } from '../../utils/helper';
+import { UserContext } from '../../context/userContext';
 
 const Login = ({setCurrentPage}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
+  const { updateUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
@@ -24,7 +26,7 @@ const Login = ({setCurrentPage}) => {
     setError("");
     //Login API Call 
     try {
-
+      
     } catch (error) {
 
     }
