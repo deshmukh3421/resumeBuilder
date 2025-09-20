@@ -16,6 +16,8 @@ import ContactInfoForm from "./Forms/ContactInfoForm";
 import WorkExperienceForm from "./Forms/WorkExperienceForm";
 import EducationDetailsForm from "./Forms/EducationDetailsForm";
 import SkillsInfoForm from "./Forms/SkillsInfoForm";
+import ProjectDetailsForm from "./Forms/ProjectDetailsForm";
+import CertificationInfoForm from "./Forms/CertificationInfoForm";
 
 const EditResume = () => {
   const { resumeId } = useParams();
@@ -28,7 +30,7 @@ const EditResume = () => {
   const [openThemeSelector, setOpenThemeSelector] = useState(false);
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
 
-  const [currentPage, setCurrentPage] = useState("skills"); 
+  const [currentPage, setCurrentPage] = useState("certifications"); 
   const [progress, setProgress] = useState(0);
 
   const [resumeData, setResumeData] = useState({
@@ -174,6 +176,34 @@ const EditResume = () => {
               removeArrayItem={(index) => 
                 removeArrayItem("skills", index)
               } 
+            />
+          );
+
+        case "projects":
+          return(
+            <ProjectDetailsForm
+              projectInfo={resumeData?.projects}
+              updateArrayItem={(index, key, value) => {
+                updateArrayItem("projects", index, key, value);
+              }}
+              addArrayItem={(newItem) => addArrayItem("projects", newItem)}
+              removeArrayItem={(index) => 
+                removeArrayItem("projects", index)
+              }
+            />
+          );
+        
+        case "certifications":
+          return(
+            <CertificationInfoForm
+              certifications={resumeData?.certifications}
+              updateArrayItem={(index, key, value) => {
+                updateArrayItem("certifications", index, key, value);
+              }}
+              addArrayItem={(newItem) => addArrayItem("certifications", newItem)}
+              removeArrayItem={(index) =>
+                removeArrayItem("certifications", index)
+              }
             />
           );
 
