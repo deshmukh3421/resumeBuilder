@@ -20,6 +20,7 @@ import ProjectDetailsForm from "./Forms/ProjectDetailsForm";
 import CertificationInfoForm from "./Forms/CertificationInfoForm";
 import AdditionalInfoForm from "./Forms/AdditionalInfoForm";
 import RenderResume from "../../components/ResumeTemplates/RenderResume";
+import { captureElementAsImage, dataURLtoFile, fixTailwindColors } from "../../utils/helper";
 
 const EditResume = () => {
   const { resumeId } = useParams();
@@ -453,9 +454,96 @@ const EditResume = () => {
     }
   };
 
-  // upload thumbnail and resume profile img
-  const uploadResumeImages = async () => {};
-  const updateResumeDetails = async (thumbnailLink, profilePreviewUrl) => {};
+// Upload resume thumbnail and profile image
+const uploadResumeImages = async () => {
+  try {
+    setIsLoading(true);
+
+    if (!resumeRef.current) {
+      toast.error("Resume element not found!");
+      return;
+    }
+
+    // Fix Tailwind colors for export
+    fixTailwindColors(resumeRef.current);
+
+    // Capture resume as image
+    const imageDataUrl = await captureElementAsImage(resumeRef.current);
+
+    // Convert captured image to File
+    const thumbnailFile = dataURLtoFile(imageDataUrl, `resume-${resumeId}.png`);
+
+    // Get profile image from state (may be null)
+    const profileImgFile = resumeData?.profileInfo?.profileImg || null;
+
+    // Check if at least one file exists
+    if (!thumbnailFile && !profileImgFile) {
+      toast.error("No images to upload!");
+      return;
+    }
+
+    // Prepare FormData
+    const formData = new FormData();
+    if (profileImgFile) formData.append("profileImg", profileImgFile);
+    if (thumbnailFile) formData.append("thumbnail", thumbnailFile);
+
+    // Debug: log all FormData entries
+    for (let pair of formData.entries()) {
+      console.log("FormData field:", pair[0], pair[1]);
+    }
+
+    // Send PUT request to backend
+    const uploadResponse = await axiosInstance.put(
+      API_PATHS.RESUME.UPLOAD_IMAGES(resumeId),
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+
+    // Destructure uploaded file URLs from backend response
+    const { thumbnailLink, profilePreviewUrl } = uploadResponse.data;
+
+    // Update resume details with uploaded URLs
+    await updateResumeDetails(thumbnailLink, profilePreviewUrl);
+
+    toast.success("Resume updated successfully!");
+    navigate("/dashboard");
+  } catch (error) {
+    console.error("Error in uploading images:", error);
+
+    // Show backend error message if available
+    toast.error(
+      error.response?.data?.message || "Failed to upload images. Please try again."
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
+
+  const updateResumeDetails = async (thumbnailLink, profilePreviewUrl) => {
+    try {
+      setIsLoading(true);
+
+      const response = await axiosInstance.put(
+        API_PATHS.RESUME.UPDATE(resumeId),
+        {
+          ...resumeData,
+          thumbnailLink: thumbnailLink || "",
+          profileInfo: {
+            ...resumeData.profileInfo,
+            profilePreviewUrl: profilePreviewUrl || "",
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error in updating resume details:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Delete Resume
   const handleDeleteResume = async () => {};

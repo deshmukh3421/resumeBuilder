@@ -14,7 +14,9 @@ router.post("/", protect, createResume);
 router.get("/", protect, getUserResumes); 
 router.get("/:id", protect, getResumeById); 
 router.put("/:id", protect, updateResume);
-router.put("/:id/upload-images", protect, uploadResumeImages);
+router.route("/:id/upload-images")
+  .put(protect, uploadResumeImages)
+  .post(protect, uploadResumeImages); // optional, if frontend uses POST
 
 router.delete("/:id", protect, deleteResume);
 
