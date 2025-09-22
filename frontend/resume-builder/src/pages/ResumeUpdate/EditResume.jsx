@@ -548,7 +548,18 @@ const uploadResumeImages = async () => {
   };
 
   // Delete Resume
-  const handleDeleteResume = async () => {};
+  const handleDeleteResume = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axiosInstance.delete(API_PATHS.RESUME.DELETE(resumeId));
+      toast.success('Resume Deleted Successfully');
+      navigate('/dashboard');
+    } catch (err) {
+      console.error("Error capturing image:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // download resume
   const reactToPrintFn = useReactToPrint({ contentRef: resumeDownloadRef });
@@ -680,7 +691,7 @@ const uploadResumeImages = async () => {
         <div className="w-[90vw] h-[80vh]">
           <ThemeSelector
             selectedTheme={resumeData?.template} 
-            setSelected Theme={(value) => { 
+            setSelectedTheme={(value) => { 
               setResumeData((prevState) => ({
                 ...prevState,
                 template: value || prevState.template,  
@@ -688,6 +699,24 @@ const uploadResumeImages = async () => {
             }}
             resumeData={null}
             onClose={() => setOpenThemeSelector(false)}
+          />
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={openPreviewModal}
+        onClose={() => setOpenPreviewModal(false)}
+        title={resumeData.title}
+        showActionBtn
+        actionBtnText="Download"
+        actionBtnIcon={<LuDownload className="text-[16px]" />}
+        onActionClick={() => reactToPrintFn()}
+      >
+        <div ref={resumeDownloadRef} className="w-[98vw] h-[90vh]">
+          <RenderResume
+            templateId={resumeData?.template?.theme || ""}
+            resumeData={resumeData}
+            colorPalette={resumeData?.template?.colorPalette || []}
           />
         </div>
       </Modal>
