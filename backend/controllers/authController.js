@@ -9,26 +9,23 @@ const generateToken = (userId) => {
 
 const registerUser = async (req, res) => {
     try{
-        const { name, email, password, profileImageUrl} = req.body;
+        const { name, email, password, profileImageUrl } = req.body;
 
-        // Check if user already exists
         const userExists = await User.findOne({ email });
         if (userExists) {
             return res.status(400).json({ message: "User already exists" });
         }
 
-        // Hash password
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash (password, salt);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Create new user
         const user = await User.create({
-            name, email,
+            name,
+            email,
             password: hashedPassword,
             profileImageUrl,
         });
 
-        // Return user data with JWT
         res.status(201).json({
             _id: user._id,
             name: user.name,
@@ -51,13 +48,11 @@ const loginUser = async (req, res) => {
             return res.status(500).json({ message: "Invalid email or password" });
         }
 
-        // Compare password
-        const isMatch = await bcrypt.compare (password, user.password);
+        const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(500).json({ message: "Invalid email or password" });
         }
 
-        // Return user data with JWT
         res.json({
             _id: user._id,
             name: user.name,
@@ -83,4 +78,23 @@ const getUserProfile = async (req, res) => {
     }
 };
 
-module.exports = { registerUser, loginUser, getUserProfile };
+// NEW FUNCTION: Update user profile image
+const updateUserProfileImage = async (userId, imageUrl) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { profileImageUrl: imageUrl },
+            { new: true } // return the updated document
+        ).select("-password");
+        return updatedUser;
+    } catch (error) {
+        throw new Error("Failed to update profile image: " + error.message);
+    }
+};
+
+module.exports = {
+    registerUser,
+    loginUser,
+    getUserProfile,
+    updateUserProfileImage, // <-- export it
+};
