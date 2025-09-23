@@ -91,6 +91,7 @@ npm run dev
 
 ## Project Structure
 
+```bash
 backend/
  ├─ controllers/
  ├─ middlewares/
@@ -106,4 +107,5 @@ frontend/
  │   ├─ utils/
  │   └─ App.jsx
  └─ vite.config.js
+```
 
