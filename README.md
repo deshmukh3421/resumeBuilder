@@ -53,7 +53,7 @@ A **full-stack resume builder** that allows users to create, edit, preview, and 
 
 ## Getting Started
 
-### 1. Clone the repository
+### Clone the repository
 
 ```bash
 git clone <your-repo-url>
@@ -70,24 +70,26 @@ npm run dev
 
 ---
 
-### Environmental Varialbes
+## Environmental Varialbes
 
-#### Backend
+### Backend
 
-PORT=5000
-MONGO_URI=<your-mongodb-uri>
-JWT_SECRET=<your-jwt-secret>
-CLIENT_URL=http://localhost:5173
-CLOUDINARY_CLOUD_NAME=<your-cloudinary-cloud-name>
-CLOUDINARY_API_KEY=<your-cloudinary-api-key>
-CLOUDINARY_API_SECRET=<your-cloudinary-api-secret>
+- PORT=5000
+- MONGO_URI=<your-mongodb-uri>
+- JWT_SECRET=<your-jwt-secret>
+- CLIENT_URL=http://localhost:5173
+- CLOUDINARY_CLOUD_NAME=<your-cloudinary-cloud-name>
+- CLOUDINARY_API_KEY=<your-cloudinary-api-key>
+- CLOUDINARY_API_SECRET=<your-cloudinary-api-secret>
 
-#### Frontend
+### Frontend
 
-VITE_API_BASE_URL=http://localhost:5000
+- VITE_API_BASE_URL=http://localhost:5000
 
 
----Project Structure
+---
+
+## Project Structure
 
 backend/
  ├─ controllers/
