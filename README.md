@@ -4,6 +4,13 @@ A **full-stack resume builder** that allows users to create, edit, preview, and 
 
 ---
 
+## Demo Credentials
+
+- Email : uday@mail.com
+- Password : uday@123
+
+---
+
 ## Table of Contents
 
 - [Features](#features)  
@@ -40,3 +47,61 @@ A **full-stack resume builder** that allows users to create, edit, preview, and 
 - **Backend:** Node.js, Express, MongoDB, Mongoose, JWT  
 - **Cloud Services:** Cloudinary (for image uploads)  
 - **Other Tools:** Vite, react-to-print  
+
+
+---
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone <your-repo-url>
+cd resumebuilder
+
+cd backend
+npm install
+npm run dev
+
+cd frontend/resume-builder
+npm install
+npm run dev
+```
+
+---
+
+### Environmental Varialbes
+
+#### Backend
+
+PORT=5000
+MONGO_URI=<your-mongodb-uri>
+JWT_SECRET=<your-jwt-secret>
+CLIENT_URL=http://localhost:5173
+CLOUDINARY_CLOUD_NAME=<your-cloudinary-cloud-name>
+CLOUDINARY_API_KEY=<your-cloudinary-api-key>
+CLOUDINARY_API_SECRET=<your-cloudinary-api-secret>
+
+#### Frontend
+
+VITE_API_BASE_URL=http://localhost:5000
+
+
+---Project Structure
+
+backend/
+ ├─ controllers/
+ ├─ middlewares/
+ ├─ models/
+ ├─ routes/
+ ├─ config/
+ └─ server.js
+
+frontend/
+ ├─ src/
+ │   ├─ components/
+ │   ├─ pages/
+ │   ├─ utils/
+ │   └─ App.jsx
+ └─ vite.config.js
+
